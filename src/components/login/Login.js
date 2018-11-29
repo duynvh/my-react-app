@@ -11,14 +11,16 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { ReCaptcha } from 'react-recaptcha-google';
+
 const styles = theme => ({
     main: {
       width: 'auto',
       display: 'block', // Fix IE 11 issue.
       marginLeft: theme.spacing.unit * 3,
       marginRight: theme.spacing.unit * 3,
-      [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-        width: 400,
+      [theme.breakpoints.up(420 + theme.spacing.unit * 3 * 2)]: {
+        width: 420,
         marginLeft: 'auto',
         marginRight: 'auto',
       },
@@ -38,12 +40,37 @@ const styles = theme => ({
       width: '100%', // Fix IE 11 issue.
       marginTop: theme.spacing.unit,
     },
-    submit: {
-      marginTop: theme.spacing.unit * 3,
+    button: {
+      marginRight: theme.spacing.unit * 1,
     },
+    boxes: {
+        marginTop: theme.spacing.unit * 3,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    text: {
+        marginLeft: theme.spacing.unit * 3
+    }
 });
 
 class Login extends Component {
+    componentDidMount() {
+        if (this.captchaDemo) {
+            console.log("started, just a second...")
+            this.captchaDemo.reset();
+        }
+    }
+    onLoadRecaptcha = () => {
+        if (this.captchaDemo) {
+            this.captchaDemo.reset();
+        }
+    }
+
+    verifyCallback = recaptchaToken => {
+    // Here you will get the final recaptchaToken!!!  
+        console.log(recaptchaToken, "<= your recaptcha token")
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -65,15 +92,36 @@ class Login extends Component {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <Input name="password" type="password" id="password" autoComplete="current-password" />
                     </FormControl>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign in
-                    </Button>
+                    <FormControl margin="normal" required fullWidth>
+                        <ReCaptcha
+                            ref={(el) => {this.captchaDemo = el;}}
+                            render="explicit"
+                            sitekey="6Lea2H0UAAAAAIFrJuHK92KVmeR8HDT2NF4hQNN2"
+                            onloadCallback={this.onLoadRecaptcha}
+                            verifyCallback={this.verifyCallback}
+                        />
+                    </FormControl>
+                    <div className={classes.boxes}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                        >
+                            Log me in
+                        </Button>
+
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                        >
+                            Register
+                        </Button>
+                        <a href="#"><span className={classes.text}>Forgot Password?</span></a>
+                    </div>
                     </form>
                 </Paper>
             </main>
