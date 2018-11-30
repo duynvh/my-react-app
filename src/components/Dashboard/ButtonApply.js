@@ -14,7 +14,7 @@ const styles = theme => ({
 });
 
 const handleClick = e => {
-  console.log(e);
+  console.log("handle click on ButtonApply");
 };
 
 function ContainedButtons(props) {
