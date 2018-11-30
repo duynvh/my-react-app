@@ -11,6 +11,9 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { ReCaptcha } from 'react-recaptcha-google';
+import { Link } from 'react-router-dom';
+
 const styles = theme => ({
     main: {
       width: 'auto',
@@ -41,9 +44,37 @@ const styles = theme => ({
     submit: {
       marginTop: theme.spacing.unit * 3,
     },
+    boxes: {
+        marginTop: theme.spacing.unit * 3,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    boxesItem: {
+        marginLeft: theme.spacing.unit * 2,
+    },
+    text: {
+        marginLeft: theme.spacing.unit * 20,
+    }
 });
 
 class Register extends Component {
+    componentDidMount() {
+        if (this.captchaDemo) {
+            console.log("started, just a second...")
+            this.captchaDemo.reset();
+        }
+    }
+    onLoadRecaptcha = () => {
+        if (this.captchaDemo) {
+            this.captchaDemo.reset();
+        }
+    }
+
+    verifyCallback = recaptchaToken => {
+    // Here you will get the final recaptchaToken!!!  
+        console.log(recaptchaToken, "<= your recaptcha token")
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -58,26 +89,53 @@ class Register extends Component {
                     </Typography>
                     <form className={classes.form}>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="fullname">Full name</InputLabel>
-                        <Input id="fullname" name="fullname" autoFocus />
+                        <InputLabel htmlFor="fullname">Username</InputLabel>
+                        <Input id="username" name="username" autoFocus />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="email">Email Address</InputLabel>
                         <Input id="email" name="email" autoComplete="email" />
                     </FormControl>
+                    <div className={classes.boxes}>
+                        <FormControl required>
+                            <InputLabel htmlFor="password">Name</InputLabel>
+                            <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        </FormControl>
+                        <FormControl required className={classes.boxesItem}>
+                            <InputLabel htmlFor="password">Phone</InputLabel>
+                            <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        </FormControl>
+                    </div>
+                    <div className={classes.boxes}>
+                        <FormControl required>
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        </FormControl>
+                        <FormControl required className={classes.boxesItem}>
+                            <InputLabel htmlFor="password">Confirm Password</InputLabel>
+                            <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        </FormControl>
+                    </div>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        <ReCaptcha
+                            ref={(el) => {this.captchaDemo = el;}}
+                            render="explicit"
+                            sitekey="6Lea2H0UAAAAAIFrJuHK92KVmeR8HDT2NF4hQNN2"
+                            onloadCallback={this.onLoadRecaptcha}
+                            verifyCallback={this.verifyCallback}
+                        />
                     </FormControl>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign in
-                    </Button>
+                    <div className={classes.boxes}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                        >
+                            Register
+                        </Button>
+                        <Link to="/login"><span className={classes.text}>Sign me in!</span></Link>
+                    </div>
                     </form>
                 </Paper>
             </main>

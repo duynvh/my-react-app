@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { Link } from 'react-router-dom';
+
 import { ReCaptcha } from 'react-recaptcha-google';
 
 const styles = theme => ({
@@ -113,6 +115,8 @@ class Login extends Component {
 
 
                         <Button
+                            component={Link} 
+                            to="/register"
                             type="submit"
                             variant="contained"
                             color="primary"
