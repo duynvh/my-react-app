@@ -6,23 +6,24 @@ import Button from "@material-ui/core/Button";
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
-    width: "100%"
+    width: "100%",
+    marginTop: '20px'
   },
   input: {
     display: "none"
   }
 });
 
-const handleClick = e => {
-  console.log("handle click on ButtonApply");
-};
+
 
 function ContainedButtons(props) {
-  const { classes } = props;
+  
+  const { classes, handleApply } = props;
+  
   return (
     <div>
       <Button
-        onClick={e => handleClick(e)}
+        onClick={() => handleApply()}
         variant="contained"
         color="primary"
         className={classes.button}

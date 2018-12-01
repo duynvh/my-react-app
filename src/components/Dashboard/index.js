@@ -12,13 +12,14 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Grid from "@material-ui/core/Grid";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-
 
 import AvatarNavigation from "./AvatarNavigation";
 import { ListNavigation } from "./ListNavigation";
 import BoxInformation from "./BoxInformation";
 import MainContent from "./MainContent";
+import ListItemInformation from "./ListItemInformation";
 
 const drawerWidth = 240;
 
@@ -81,11 +82,31 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
   state = {
-    open: false
+    open: true,
+    filter1: [],
+    listData: [1, 2, 3, 4]
+  };
+
+  handleFilter1 = value => {
+    this.setState({ filter1: value });
+  };
+
+  handleApply = () => {
+    console.log(this.state.filter1);
+    const newData = [...this.state.listData];
+    this.setState(
+      {
+        listData:
+          this.state.filter1.length > 0
+            ? newData.filter(item => item === 1)
+            : newData
+      },
+      console.log(newData)
+    );
   };
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    this.setState({   open: true });
   };
 
   handleDrawerClose = () => {
@@ -140,10 +161,7 @@ class Dashboard extends React.Component {
           <Divider />
           <AvatarNavigation />
           <Divider />
-          <List>
-         
-            {ListNavigation}
-          </List>
+          <List>{ListNavigation}</List>
         </Drawer>
         <main
           className={classNames(classes.content, {
@@ -151,38 +169,15 @@ class Dashboard extends React.Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <BoxInformation></BoxInformation>
-          {/* <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-            dolor purus non enim praesent elementum facilisis leo vel. Risus at
-            ultrices mi tempus imperdiet. Semper risus in hendrerit gravida
-            rutrum quisque non tellus. Convallis convallis tellus id interdum
-            velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
-            sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-            integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-            eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-            quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-            vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-            donec massa sapien faucibus et molestie ac.
-          </Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-            ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-            elementum integer enim neque volutpat ac tincidunt. Ornare
-            suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-            volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
-            Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-            ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
-            aliquam sem et tortor. Habitant morbi tristique senectus et.
-            Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean
-            euismod elementum nisi quis eleifend. Commodo viverra maecenas
-            accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
-          </Typography> */}
-          <MainContent></MainContent>
+          <BoxInformation />
+          <MainContent
+            filter1={this.state.filter1}
+            handleFilter1={this.handleFilter1}
+            handleApply={this.handleApply}
+          />
+          <Grid container spacing={24}>
+            <ListItemInformation listData={this.state.listData} />
+          </Grid>
         </main>
       </div>
     );

@@ -60,15 +60,14 @@ class FirstButton extends React.Component {
     name: []
   };
 
+  
   handleChange = event => {
-    console.log(event.target.value);
-    this.setState({ name: event.target.value });
+    this.setState({ name: event.target.value }, this.props.handleFilter1(event.target.value) );
   };
 
   render() {
+    // console.log(this.state)
     const { classes } = this.props;
-    console.log(this.state.name);
-
     return (
       <div className={classes.root}>
         <FormControl className={classes.formControl}>

@@ -17,7 +17,8 @@ const styles = theme => ({
 });
 
 function MainContent(props) {
-  const { classes } = props;
+  // console.log(props)
+  const { classes, handleFilter1, filter1 } = props;
 
   return (
     <div
@@ -27,16 +28,16 @@ function MainContent(props) {
     >
       <Grid container spacing={24}>
         <Grid item sm={3} xs={12}>
-          <FirstButton />
+          <FirstButton handleFilter1={handleFilter1} />
         </Grid>
         <Grid item sm={3} xs={12}>
           <SecondButton />
         </Grid>
         <Grid item sm={3} xs={12}>
-          <Paper className={classes.paper}>xs=12</Paper>
+        <SecondButton />
         </Grid>
         <Grid item sm={3} xs={12}>
-          <ButtonApply />
+          <ButtonApply handleApply={props.handleApply} />
         </Grid>
       </Grid>
     </div>
