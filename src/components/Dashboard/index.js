@@ -6,7 +6,6 @@ import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,7 +15,7 @@ import Grid from "@material-ui/core/Grid";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 import AvatarNavigation from "./AvatarNavigation";
-import { ListNavigation } from "./ListNavigation";
+import ListNavigation from './ListNavigation'
 import BoxInformation from "./BoxInformation";
 import MainContent from "./MainContent";
 import ListItemInformation from "./ListItemInformation";
@@ -161,7 +160,7 @@ class Dashboard extends React.Component {
           <Divider />
           <AvatarNavigation />
           <Divider />
-          <List>{ListNavigation}</List>
+          <ListNavigation/>
         </Drawer>
         <main
           className={classNames(classes.content, {

@@ -37,7 +37,7 @@ class SecondButton extends React.Component {
     return (
       <div className={classes.root}>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-simple">Age</InputLabel>
+          <InputLabel htmlFor="age-simple">Current Sort</InputLabel>
           <Select
             value={this.state.age}
             onChange={this.handleChange}
@@ -46,12 +46,9 @@ class SecondButton extends React.Component {
               id: "age-simple"
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={10}>Buy 50-70%</MenuItem>
+            <MenuItem value={20}>Sale >50%</MenuItem>
+            <MenuItem value={30}>Sale 50-70%</MenuItem>
           </Select>
         </FormControl>
       </div>
