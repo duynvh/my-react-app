@@ -10,7 +10,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 
-
 const styles = theme => ({
   root: {
     display: "flex",
@@ -44,40 +43,36 @@ const MenuProps = {
 };
 
 const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder"
+  'Default',
+  "BTC",
+  "ETH",
+  "USDT",
+  "BNB",
 ];
-
 
 class FirstButton extends React.Component {
   state = {
     name: []
   };
 
+  
   handleChange = event => {
-    this.setState({ name: event.target.value });
+    this.setState({ name: event.target.value }, this.props.handleFilter1(event.target.value) );
   };
 
   render() {
+    // console.log(this.state)
     const { classes } = this.props;
-    console.log(this.state.name)
-
     return (
       <div className={classes.root}>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="select-multiple-checkbox">Tag</InputLabel>
+          <InputLabel htmlFor="select-multiple-checkbox">
+            Select Pair
+          </InputLabel>
           <Select
             multiple
             value={this.state.name}
-            onChange={this.handleChange}
+            onChange={e => this.handleChange(e)}
             input={<Input id="select-multiple-checkbox" />}
             renderValue={selected => selected.join(", ")}
             MenuProps={MenuProps}

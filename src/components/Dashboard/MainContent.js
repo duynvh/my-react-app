@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import FirstButton from './ButtonFilter/FirstButton'
+import FirstButton from "./ButtonFilter/FirstButton";
+import ButtonApply from "./ButtonApply";
+import SecondButton from "./ButtonFilter/SecondButton";
 
 const styles = theme => ({
   root: {
@@ -15,29 +17,29 @@ const styles = theme => ({
 });
 
 function MainContent(props) {
-  const { classes } = props;
+  // console.log(props)
+  const { classes, handleFilter1, filter1 } = props;
 
   return (
-    <div style={{
-        marginTop:'25px'
-    }} >
-
-        <Grid container spacing={24}>
-          <Grid item sm={3} xs={12}>
-            <FirstButton></FirstButton>
-          </Grid>
-          <Grid item sm={3} xs={12}>
-            <Paper className={classes.paper}>xs=12</Paper>
-          </Grid>
-          <Grid item sm={3} xs={12}>
-            <Paper className={classes.paper}>xs=12</Paper>
-          </Grid>
-          <Grid item sm={3} xs={12}>
-            <Paper className={classes.paper}>xs=12</Paper>
-          </Grid>
-         
+    <div
+      style={{
+        marginTop: "25px"
+      }}
+    >
+      <Grid container spacing={24}>
+        <Grid item sm={3} xs={12}>
+          <FirstButton handleFilter1={handleFilter1} />
         </Grid>
-     
+        <Grid item sm={3} xs={12}>
+          <SecondButton />
+        </Grid>
+        <Grid item sm={3} xs={12}>
+        <SecondButton />
+        </Grid>
+        <Grid item sm={3} xs={12}>
+          <ButtonApply handleApply={props.handleApply} />
+        </Grid>
+      </Grid>
     </div>
   );
 }
