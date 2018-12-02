@@ -14,6 +14,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 
 import { ReCaptcha } from 'react-recaptcha-google';
+import { loginUser } from '../../actions/auth';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const styles = theme => ({
     main: {
@@ -56,12 +61,59 @@ const styles = theme => ({
 });
 
 class Login extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            username: '',
+            password: '',
+            recaptchaToken: '',
+            errors: '',
+            success: ''
+        };
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        if(this.state.recaptchaToken !== "") {
+            const user = {
+                username: this.state.username,
+                password: this.state.password
+            };
+            console.log(user);
+            return;
+            this.props.loginUser(user, this.props.history);
+        }
+    }
+
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
     componentDidMount() {
         if (this.captchaDemo) {
-            console.log("started, just a second...")
             this.captchaDemo.reset();
         }
     }
+
+    componentWillReceiveProps(nextProps) 
+    {
+        const auth = nextProps.auth;
+        if (auth.isAuthenticated) {
+          this.props.history.push('/dashboard');
+        }
+    
+        if (auth.error !== "") {
+            this.setState({
+                error: auth.error    
+            }, () => {
+                this.resetMessage()    
+            });
+        }
+    }
+
     onLoadRecaptcha = () => {
         if (this.captchaDemo) {
             this.captchaDemo.reset();
@@ -69,8 +121,16 @@ class Login extends Component {
     }
 
     verifyCallback = recaptchaToken => {
-    // Here you will get the final recaptchaToken!!!  
+        this.setState({
+            recaptchaToken
+        });
         console.log(recaptchaToken, "<= your recaptcha token")
+    }
+
+    resetMessage() {
+        setTimeout(()=>{this.setState({
+          error: ''
+        })}, 5000)
     }
 
     render() {
@@ -85,14 +145,18 @@ class Login extends Component {
                     <Typography component="h1" variant="h5">
                     Login
                     </Typography>
-                    <form className={classes.form}>
+                    <form onSubmit={this.onSubmit} className={classes.form}>
+                    { this.state.error  && NotificationManager.error(this.state.error, '', 2000, () => {
+                            alert('callback');
+                        })}
+                    <NotificationContainer/>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">Email Address</InputLabel>
-                        <Input id="email" name="email" autoComplete="email" autoFocus />
+                        <InputLabel htmlFor="username">Username</InputLabel>
+                        <Input onChange={this.onChange} defaultValue={this.state.username} id="username" name="username" autoComplete="username" autoFocus />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="password">Password</InputLabel>
-                        <Input name="password" type="password" id="password" autoComplete="current-password" />
+                        <Input onChange={this.onChange} defaultValue={this.state.password} name="password" type="password" id="password" autoComplete="current-password" />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
@@ -117,7 +181,6 @@ class Login extends Component {
                         <Button
                             component={Link} 
                             to="/register"
-                            type="submit"
                             variant="contained"
                             color="primary"
                             className={classes.button}
@@ -137,4 +200,9 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Login);
+
+const mapStateToProps = (state, ownProps) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, {loginUser})(withRouter(withStyles(styles)(Login)));

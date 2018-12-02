@@ -13,6 +13,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import { ReCaptcha } from 'react-recaptcha-google';
 import { Link } from 'react-router-dom';
+import { registerUser } from '../../actions/auth';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
     main: {
@@ -58,11 +61,44 @@ const styles = theme => ({
 });
 
 class Register extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            email: '',
+            username: '',
+            password: '',
+            telephone: '',
+            recaptchaToken: '',
+            errors: {}
+        };
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        if(this.state.recaptchaToken !== "") {
+            const user = {
+                username: this.state.username,
+                password: this.state.password,
+                email: this.state.email,
+                telephone: this.state.telephone
+            };
+            this.props.registerUser(user, this.props.history);
+        }
+    }
+
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
     componentDidMount() {
         if (this.captchaDemo) {
             console.log("started, just a second...")
             this.captchaDemo.reset();
         }
+        console.log(this.props.auth);
     }
     onLoadRecaptcha = () => {
         if (this.captchaDemo) {
@@ -71,8 +107,9 @@ class Register extends Component {
     }
 
     verifyCallback = recaptchaToken => {
-    // Here you will get the final recaptchaToken!!!  
-        console.log(recaptchaToken, "<= your recaptcha token")
+        this.setState({
+            recaptchaToken
+        });
     }
 
     render() {
@@ -87,35 +124,23 @@ class Register extends Component {
                     <Typography component="h1" variant="h5">
                     Register
                     </Typography>
-                    <form className={classes.form}>
+                    <form onSubmit={this.onSubmit} className={classes.form}>
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="fullname">Username</InputLabel>
-                        <Input id="username" name="username" autoFocus />
+                        <Input onChange={this.onChange} defaultValue={this.state.username} id="username" name="username" autoFocus />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="email">Email Address</InputLabel>
-                        <Input id="email" name="email" autoComplete="email" />
+                        <Input onChange={this.onChange} defaultValue={this.state.email} id="email" name="email" autoComplete="email" />
                     </FormControl>
-                    <div className={classes.boxes}>
-                        <FormControl required>
-                            <InputLabel htmlFor="password">Name</InputLabel>
-                            <Input name="password" type="password" id="password" autoComplete="current-password" />
-                        </FormControl>
-                        <FormControl required className={classes.boxesItem}>
-                            <InputLabel htmlFor="password">Phone</InputLabel>
-                            <Input name="password" type="password" id="password" autoComplete="current-password" />
-                        </FormControl>
-                    </div>
-                    <div className={classes.boxes}>
-                        <FormControl required>
-                            <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input name="password" type="password" id="password" autoComplete="current-password" />
-                        </FormControl>
-                        <FormControl required className={classes.boxesItem}>
-                            <InputLabel htmlFor="password">Confirm Password</InputLabel>
-                            <Input name="password" type="password" id="password" autoComplete="current-password" />
-                        </FormControl>
-                    </div>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input type="password" onChange={this.onChange} defaultValue={this.state.password} id="password" name="password" autoComplete="password" />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="telephone">Phone</InputLabel>
+                        <Input onChange={this.onChange} defaultValue={this.state.telephone} id="telephone" name="telephone" autoComplete="telephone" />
+                    </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
                             ref={(el) => {this.captchaDemo = el;}}
@@ -147,4 +172,8 @@ Register.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Register);
+const mapStateToProps = (state, ownProps) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, {registerUser})(withRouter(withStyles(styles)(Register)));
