@@ -7,6 +7,7 @@ const initialState = {
 const auth = (state = initialState, action) => {
     switch(action.type) {
         case types.REGISTER_FAIL: 
+        console.log(action.payload)
             return {
                 ...state,
                 error: action.payload.message

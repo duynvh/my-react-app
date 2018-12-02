@@ -10,7 +10,7 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-
+import isEmpty from '../../validation/is-empty'
 import { Link } from 'react-router-dom';
 
 import { ReCaptcha } from 'react-recaptcha-google';
@@ -76,14 +76,15 @@ class Login extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         if(this.state.recaptchaToken !== "") {
-            const user = {
-                username: this.state.username,
-                password: this.state.password
-            };
-            console.log(user);
-            return;
-            this.props.loginUser(user, this.props.history);
+           
         }
+        const user = {
+            username: this.state.username,
+            password: this.state.password
+        };
+        console.log('dad')
+       
+        this.props.loginUser(user, this.props.history);
     }
 
     onChange = (e) => {
@@ -93,9 +94,9 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if (this.captchaDemo) {
-            this.captchaDemo.reset();
-        }
+        // if (this.captchaDemo) {
+        //     this.captchaDemo.reset();
+        // }
     }
 
     componentWillReceiveProps(nextProps) 
@@ -104,10 +105,11 @@ class Login extends Component {
         if (auth.isAuthenticated) {
           this.props.history.push('/dashboard');
         }
+        console.log(auth)
     
         if (auth.error !== "") {
             this.setState({
-                error: auth.error    
+                errors: auth.error    
             }, () => {
                 this.resetMessage()    
             });
@@ -135,6 +137,7 @@ class Login extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state.errors )
         return (
             <main className={classes.main}>
                 <CssBaseline />
@@ -158,7 +161,10 @@ class Login extends Component {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <Input onChange={this.onChange} defaultValue={this.state.password} name="password" type="password" id="password" autoComplete="current-password" />
                     </FormControl>
-                    <FormControl margin="normal" required fullWidth>
+                    {
+                        this.state.errors!=="" && <div>dad</div>
+                    }
+                    {/* <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
                             ref={(el) => {this.captchaDemo = el;}}
                             render="explicit"
@@ -166,7 +172,7 @@ class Login extends Component {
                             onloadCallback={this.onLoadRecaptcha}
                             verifyCallback={this.verifyCallback}
                         />
-                    </FormControl>
+                    </FormControl> */}
                     <div className={classes.boxes}>
                         <Button
                             type="submit"
@@ -202,6 +208,7 @@ Login.propTypes = {
 
 
 const mapStateToProps = (state, ownProps) => ({
+    
     auth: state.auth
 });
 
