@@ -34,7 +34,7 @@ export const loginUser = (user, history) => dispatch => {
     axios
         .post(configs.URL_API + 'login', user)
         .then(res => {
-            console.log(res.data)
+            console.log(res.data.code);
             if(res.data.code === 6) {
                 history.push('/dashboard');
             }

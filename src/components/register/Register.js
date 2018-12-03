@@ -76,22 +76,18 @@ class Register extends Component {
     }
 
     onSubmit = (e) => {
-        console.log('dad')
         e.preventDefault();
         if(this.state.recaptchaToken !== "") {
             const user = {
-            username: this.state.username,
-            password: this.state.password,
-            email: this.state.email,
-            telephone: this.state.telephone
-        };
-        this.props.registerUser(user, this.props.history);
+                username: this.state.username,
+                password: this.state.password,
+                email: this.state.email,
+                telephone: this.state.telephone
+            };
+            this.props.registerUser(user, this.props.history);
         }
        
     }
-
-
-    
 
     onChange = (e) => {
         this.setState({

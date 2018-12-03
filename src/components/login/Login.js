@@ -76,15 +76,12 @@ class Login extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         if(this.state.recaptchaToken !== "") {
-           
+            const user = {
+                username: this.state.username,
+                password: this.state.password
+            };
+            this.props.loginUser(user, this.props.history);
         }
-        const user = {
-            username: this.state.username,
-            password: this.state.password
-        };
-        console.log('dad')
-       
-        this.props.loginUser(user, this.props.history);
     }
 
     onChange = (e) => {
@@ -94,9 +91,9 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        // if (this.captchaDemo) {
-        //     this.captchaDemo.reset();
-        // }
+        if (this.captchaDemo) {
+            this.captchaDemo.reset();
+        }
     }
 
     componentWillReceiveProps(nextProps) 
@@ -105,7 +102,6 @@ class Login extends Component {
         if (auth.isAuthenticated) {
           this.props.history.push('/dashboard');
         }
-        console.log(auth)
     
         if (auth.error !== "") {
             this.setState({
@@ -137,7 +133,6 @@ class Login extends Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state.errors )
         return (
             <main className={classes.main}>
                 <CssBaseline />
@@ -162,9 +157,15 @@ class Login extends Component {
                         <Input onChange={this.onChange} defaultValue={this.state.password} name="password" type="password" id="password" autoComplete="current-password" />
                     </FormControl>
                     {
-                        this.state.errors!=="" && <div>dad</div>
+                        !isEmpty(this.state.errors)  && <Paper > 
+                                <p style={{
+                                    color: 'red'
+                                }}>
+                                   { this.state.errors}
+                                </p>
+                             </Paper>
                     }
-                    {/* <FormControl margin="normal" required fullWidth>
+                    <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
                             ref={(el) => {this.captchaDemo = el;}}
                             render="explicit"
@@ -172,7 +173,7 @@ class Login extends Component {
                             onloadCallback={this.onLoadRecaptcha}
                             verifyCallback={this.verifyCallback}
                         />
-                    </FormControl> */}
+                    </FormControl>
                     <div className={classes.boxes}>
                         <Button
                             type="submit"
@@ -182,8 +183,6 @@ class Login extends Component {
                         >
                             Log me in
                         </Button>
-
-
                         <Button
                             component={Link} 
                             to="/register"
@@ -208,7 +207,6 @@ Login.propTypes = {
 
 
 const mapStateToProps = (state, ownProps) => ({
-    
     auth: state.auth
 });
 
