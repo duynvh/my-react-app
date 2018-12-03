@@ -10,7 +10,7 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-
+import isEmpty from '../../validation/is-empty'
 import { Link } from 'react-router-dom';
 
 import { ReCaptcha } from 'react-recaptcha-google';
@@ -80,7 +80,6 @@ class Login extends Component {
                 username: this.state.username,
                 password: this.state.password
             };
-            console.log(user);
             this.props.loginUser(user, this.props.history);
         }
     }
@@ -186,8 +185,6 @@ class Login extends Component {
                         >
                             Log me in
                         </Button>
-
-
                         <Button
                             component={Link} 
                             to="/register"

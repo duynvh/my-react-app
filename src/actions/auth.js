@@ -4,10 +4,13 @@ import axios from 'axios';
 
 // Register User
 export const registerUser = (user, history) => dispatch => {
+    console.log('dad')
     axios
         .post(configs.URL_API + 'register', user)
         .then(res => {
-            if (res.data.code != 1) 
+            console.log(res)
+           
+            if (res.data.code !== 1) 
             {
                 dispatch(fail(types.REGISTER_FAIL, res.data.msg))
             }
@@ -18,9 +21,10 @@ export const registerUser = (user, history) => dispatch => {
             }
         })
         .catch(err => {
+            console.log(err)
             dispatch({
                 type: types.GET_ERRORS,
-                payload: err.response.data
+                payload: err.error
             })
         })
 }
@@ -35,7 +39,7 @@ export const loginUser = (user, history) => dispatch => {
             }
             else {
                 console.log(res.data);
-                dispatch(fail(types.LOGIN_FAIL, res.data.msg))
+                history.push('/register');
                 // // Save to localStorage
                 // const { token } = res.data;
 

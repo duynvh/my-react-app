@@ -10,6 +10,7 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import isEmpty from '../../validation/is-empty'
 
 import { ReCaptcha } from 'react-recaptcha-google';
 import { Link } from 'react-router-dom';
@@ -85,12 +86,29 @@ class Register extends Component {
             };
             this.props.registerUser(user, this.props.history);
         }
+       
     }
 
     onChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
+    }
+
+    componentWillReceiveProps(nextProps) 
+    {
+        console.log('dadasd')
+        const auth = nextProps.auth;
+        if (auth.isAuthenticated) {
+          this.props.history.push('/dashboard');
+        }
+        console.log(auth)
+        if (auth.error !== "") {
+            
+            this.setState({
+                errors: auth.error    
+            });
+        }
     }
 
     componentDidMount() {
@@ -113,6 +131,7 @@ class Register extends Component {
     }
 
     render() {
+        // console.log(this.state)
         const { classes } = this.props;
         return (
             <main className={classes.main}>
@@ -141,6 +160,15 @@ class Register extends Component {
                         <InputLabel htmlFor="telephone">Phone</InputLabel>
                         <Input onChange={this.onChange} defaultValue={this.state.telephone} id="telephone" name="telephone" autoComplete="telephone" />
                     </FormControl>
+                    {
+                        !isEmpty(this.state.errors)  && <Paper > 
+                                <p style={{
+                                    color: 'red'
+                                }}>
+                                   { this.state.errors}
+                                </p>
+                             </Paper>
+                    }
                     <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
                             ref={(el) => {this.captchaDemo = el;}}
