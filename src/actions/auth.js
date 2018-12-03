@@ -30,12 +30,12 @@ export const loginUser = (user, history) => dispatch => {
     axios
         .post(configs.URL_API + 'login', user)
         .then(res => {
-            if(res.data.code != 1) {
-                dispatch(fail(types.LOGIN_FAIL, res.data.msg))
+            if(res.data.code === 6) {
+                history.push('/dashboard');
             }
             else {
                 console.log(res.data);
-                history.push('/register');
+                dispatch(fail(types.LOGIN_FAIL, res.data.msg))
                 // // Save to localStorage
                 // const { token } = res.data;
 

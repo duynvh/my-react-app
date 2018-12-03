@@ -81,7 +81,6 @@ class Login extends Component {
                 password: this.state.password
             };
             console.log(user);
-            return;
             this.props.loginUser(user, this.props.history);
         }
     }
@@ -101,13 +100,14 @@ class Login extends Component {
     componentWillReceiveProps(nextProps) 
     {
         const auth = nextProps.auth;
+        console.log(auth)
         if (auth.isAuthenticated) {
           this.props.history.push('/dashboard');
         }
     
         if (auth.error !== "") {
             this.setState({
-                error: auth.error    
+                errors: auth.error    
             }, () => {
                 this.resetMessage()    
             });
@@ -135,6 +135,7 @@ class Login extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state.errors)
         return (
             <main className={classes.main}>
                 <CssBaseline />
@@ -158,6 +159,15 @@ class Login extends Component {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <Input onChange={this.onChange} defaultValue={this.state.password} name="password" type="password" id="password" autoComplete="current-password" />
                     </FormControl>
+                   { this.state.errors !=="" && <FormControl>
+                        <Paper>
+                            <p style={{
+                                width: '100%',
+                                color: 'red'
+                            }}> {this.state.errors} </p>
+                        </Paper>
+                    </FormControl>
+                   }
                     <FormControl margin="normal" required fullWidth>
                         <ReCaptcha
                             ref={(el) => {this.captchaDemo = el;}}
