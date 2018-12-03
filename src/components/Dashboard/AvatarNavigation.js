@@ -5,6 +5,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from "@material-ui/icons/Done";
+import {withRouter} from 'react-router-dom'
 
 const styles = {
   avatar: {
@@ -18,7 +19,14 @@ const styles = {
 };
 
 function AvatarNavigation(props) {
-  const { classes } = props;
+
+  const { classes, history } = props;
+  
+  const handleClick = (e,history) => {
+    // history.push('/register')
+    window.open('http://www.google.com', '_blank')
+  }
+
   return (
     <div>
       <Grid container justify="center" alignItems="center">
@@ -33,6 +41,7 @@ function AvatarNavigation(props) {
       </Grid>
       <Grid container direction="row" justify="center" alignItems="center">
         <Chip
+          onClick={(e) => handleClick(e, history)}
           style={{
             margin: "10px 0px",
             maxWidth: "200px",
@@ -56,4 +65,4 @@ AvatarNavigation.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AvatarNavigation);
+export default withStyles(styles)(withRouter( AvatarNavigation));
