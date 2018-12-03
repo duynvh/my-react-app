@@ -94,6 +94,10 @@ class Login extends Component {
         if (this.captchaDemo) {
             this.captchaDemo.reset();
         }
+
+        if(this.props.auth.isAuthenticated) {
+            this.props.history.push('/dashboard');
+        }
     }
 
     componentWillReceiveProps(nextProps) 

@@ -1,6 +1,8 @@
 import * as types from '../constants/ActionTypes';
 import * as configs from '../constants/Config';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from '../utils/setAuthToken';
 
 // Register User
 export const registerUser = (user, history) => dispatch => {
@@ -35,25 +37,25 @@ export const loginUser = (user, history) => dispatch => {
         .post(configs.URL_API + 'login', user)
         .then(res => {
             if(res.data.code === 6) {
-                history.push('/dashboard');
-            }
-            else {
-                console.log(res.data);
-                history.push('/register');
                 // // Save to localStorage
-                // const { token } = res.data;
+                const token = res.data.msg;
 
                 // // Set token to localStorage
-                // localStorage.setItem('jwtToken', token);
+                localStorage.setItem('jwtToken', token);
 
                 // // Set token to Auth header
-                // setAuthToken(token);
+                setAuthToken(token);
 
                 // // Decode token to get user data
-                // const decoded = jwt_decode(token); 
+                const decoded = jwt_decode(token); 
 
                 // // Set current user
-                // dispatch(setCurrentUser(decoded))
+                dispatch(setCurrentUser(decoded))
+                console.log(decoded);
+                //history.push('/dashboard');
+            }
+            else {
+                history.push('/register');
             }
         })
         .catch(err => {
@@ -82,4 +84,24 @@ export const success = (type, message) => {
             message: message
         }
     }
+}
+
+// Set logged in user
+export const setCurrentUser = (decoded) => {
+    return {
+        type: types.SET_CURRENT_USER,
+        payload: decoded
+    }
+}
+
+// Log user out
+export const logoutUser = () => dispatch => {
+    // Remove token from localStorage
+    localStorage.removeItem('jwtToken');
+
+    // Remove auth header for future requests
+    setAuthToken(false);
+
+    // Set current user to {} which will set isAuthenticated
+    dispatch(setCurrentUser({}));
 }

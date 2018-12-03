@@ -3,6 +3,8 @@ import { loadReCaptcha } from "react-recaptcha-google";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import Dashboard from "./components/Dashboard";
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
 
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 

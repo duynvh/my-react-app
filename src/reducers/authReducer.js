@@ -1,7 +1,10 @@
 import * as types from '../constants/ActionTypes';
+import isEmpty from '../validation/is-empty';
 const initialState = {
     error: '',
-    success: ''
+    success: '',
+    isAuthenticated: false,
+    user: {}
 };
 
 const auth = (state = initialState, action) => {
@@ -22,6 +25,12 @@ const auth = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload.message
+            };
+        case types.SET_CURRENT_USER: 
+            return {
+                ...state,
+                isAuthenticated: !isEmpty(action.payload),
+                user: action.payload
             };
         default:
             return state;    
