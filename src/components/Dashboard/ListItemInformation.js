@@ -29,33 +29,41 @@ const styles = {
 };
 
 function ListItemInformation(props) {
-  const { classes, listData } = props;
-  const bull = <span className={classes.bullet}>•</span>;
+  const { classes, listData, loading } = props;
+
   return (
     <Fragment>
-      {listData.map(item => (
-        <Grid key={item} item sm={3}>
-          <Card className={classes.card} selected>
-            <CardContent>
-            <Typography align="center" variant="body2" gutterBottom>
-                Name: 11:59 Nov 04,2018
-              </Typography>
-              <Typography align="center" variant="title" gutterBottom>
-                Name: BCCBTC
-              </Typography>
-              <Typography component="p">Price : xxxxxx</Typography>
-              <Typography component="p">Hi 24h : xxxxxx</Typography>
-              <Typography component="p">Lo 24h: 0.06650000</Typography>
-              <Typography component="p">Vol 24h: 3922.9900424</Typography>
-              <Typography component="p">Total Execution Order: 252</Typography>{" "}
-              <Typography component="p">Total Bought Order: 103</Typography>{" "}
-              <Typography component="p">Total Sold Order: 149</Typography>
-              <Typography component="p">Bought Value: 14.9916 (52.65%)</Typography>
-              <Typography component="p">Sold Value: 13.4847 (47.35%)</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
+      {listData.length > 0 && !loading
+        ? listData.map((item,i) => (
+            <Grid key={i} item sm={3}>
+              <Card className={classes.card} selected>
+                <CardContent>
+                  <Typography align="center" variant="body2" gutterBottom>
+                    Date: {item.UpdateTime}
+                  </Typography>
+                  <Typography align="center" variant="title" gutterBottom>
+                    Name: {item.Name}
+                  </Typography>
+                  <Typography component="p">Price : {item.Price}</Typography>
+                  <Typography component="p">Hi 24h : {item.Hi24hr}</Typography>
+                  <Typography component="p">Lo 24h: {item.Lo24hr}</Typography>
+                  <Typography component="p">Vol 24h: {item.Vol24hr}</Typography>
+                  <Typography component="p">
+                    Total Execution Order:{item.TotalExecutionOrder}
+                  </Typography>{" "}
+                  <Typography component="p">Total Bought Order: {item.TotalBoughtOrder}</Typography>{" "}
+                  <Typography component="p">Total Sold Order: {item.TotalSoldOrder}</Typography>
+                  <Typography component="p">
+                    Bought Value: {item.TotalBoughtValue}
+                  </Typography>
+                  <Typography component="p">
+                    Sold Value: {item.TotalSoldValue}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        : "loading"}
     </Fragment>
   );
 }

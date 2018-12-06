@@ -15,10 +15,11 @@ import Grid from "@material-ui/core/Grid";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 import AvatarNavigation from "./AvatarNavigation";
-import ListNavigation from './ListNavigation'
+import ListNavigation from "./ListNavigation";
 import BoxInformation from "./BoxInformation";
 import MainContent from "./MainContent";
 import ListItemInformation from "./ListItemInformation";
+import { connect } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -83,8 +84,30 @@ class Dashboard extends React.Component {
   state = {
     open: true,
     filter1: [],
-    listData: [1, 2, 3, 4]
+    listData: [1, 2, 3, 4],
+    socket: [],
+    loading: true
   };
+
+  componentDidMount() {
+    // const socket = socketIOClient('http://52.193.53.226:5000');
+    // socket.emit('message','haha')
+    // socket.on("FromAPI", data => console.log(data));
+    // const arrSocket = [];
+    // const socket = socketIOClient("http://52.193.53.226:5000");
+    // socket.on("message", data => {
+    //   if (data) {
+    //     const newData = JSON.parse(data);
+    //     console.log(newData);
+    //     arrSocket.push(newData);
+    //   }
+    //   this.setState({
+    //     loading: false,
+    //     socket: arrSocket
+    //   });
+    // });
+    // socket.emit("message", "haha");
+  }
 
   handleFilter1 = value => {
     this.setState({ filter1: value });
@@ -105,7 +128,7 @@ class Dashboard extends React.Component {
   };
 
   handleDrawerOpen = () => {
-    this.setState({   open: true });
+    this.setState({ open: true });
   };
 
   handleDrawerClose = () => {
@@ -115,7 +138,7 @@ class Dashboard extends React.Component {
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
-
+    console.log(this.state.socket);
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -160,7 +183,7 @@ class Dashboard extends React.Component {
           <Divider />
           <AvatarNavigation />
           <Divider />
-          <ListNavigation/>
+          <ListNavigation />
         </Drawer>
         <main
           className={classNames(classes.content, {
@@ -175,7 +198,10 @@ class Dashboard extends React.Component {
             handleApply={this.handleApply}
           />
           <Grid container spacing={24}>
-            <ListItemInformation listData={this.state.listData} />
+            <ListItemInformation
+              loading={this.state.loading}
+              listData={this.state.socket}
+            />
           </Grid>
         </main>
       </div>
@@ -188,4 +214,13 @@ Dashboard.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(Dashboard);
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    socket: state
+  };
+};
+
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(Dashboard)
+);
