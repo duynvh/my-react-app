@@ -19,7 +19,7 @@ import ListNavigation from "./ListNavigation";
 import BoxInformation from "./BoxInformation";
 import MainContent from "./MainContent";
 import ListItemInformation from "./ListItemInformation";
-import socketIOClient from "socket.io-client";
+import { connect } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -91,25 +91,22 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     // const socket = socketIOClient('http://52.193.53.226:5000');
-
     // socket.emit('message','haha')
     // socket.on("FromAPI", data => console.log(data));
-
-    const arrSocket = [];
-    const socket = socketIOClient("http://52.193.53.226:5000");
-
-    socket.on("message", data => {
-      if (data) {
-        const newData = JSON.parse(data);
-        console.log(newData);
-        arrSocket.push(newData);
-      }
-      this.setState({
-        loading: false,
-        socket: arrSocket
-      });
-    });
-    socket.emit("message", "haha");
+    // const arrSocket = [];
+    // const socket = socketIOClient("http://52.193.53.226:5000");
+    // socket.on("message", data => {
+    //   if (data) {
+    //     const newData = JSON.parse(data);
+    //     console.log(newData);
+    //     arrSocket.push(newData);
+    //   }
+    //   this.setState({
+    //     loading: false,
+    //     socket: arrSocket
+    //   });
+    // });
+    // socket.emit("message", "haha");
   }
 
   handleFilter1 = value => {
@@ -217,4 +214,13 @@ Dashboard.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(Dashboard);
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    socket: state
+  };
+};
+
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(Dashboard)
+);
