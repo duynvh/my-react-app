@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -12,44 +12,19 @@ import PropTypes from "prop-types";
 import AttachMoney from "@material-ui/icons/AttachMoney";
 import PhoneInTalk from "@material-ui/icons/PhoneInTalk";
 import List from "@material-ui/core/List";
-
-const listNavigations = [
-  {
-    name: "Dashboard",
-    icon: <DashboardIcon />
-  },
-  {
-    name: "Profile",
-    icon: <Settings />
-  },
-  {
-    name: "Wallet",
-    icon: <Assignment />
-  },
-  {
-    name: "My Team",
-    icon: <Home />
-  },
-  {
-    name: "Product",
-    icon: <ShoppingCart />
-  },
-  {
-    name: "Comission",
-    icon: <AttachMoney />
-  },
-  {
-    name: "2FA",
-    icon: <PhoneInTalk />
-  }
-];
+import Collapse from "@material-ui/core/Collapse";
+import StarBorder from "@material-ui/icons/StarBorder";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 
 const styles = theme => ({
   root: {
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper
-  }
+  },nested: {
+    paddingLeft: theme.spacing.unit * 5,
+  },
 });
 
 class ListNavigation extends React.Component {
@@ -57,7 +32,8 @@ class ListNavigation extends React.Component {
     listNavigations: [
       {
         name: "Dashboard",
-        icon: <DashboardIcon />
+        icon: <DashboardIcon />,
+        subItems: [{ name: "", icon: <DashboardIcon /> }]
       },
       {
         name: "Profile",
@@ -84,30 +60,57 @@ class ListNavigation extends React.Component {
         icon: <PhoneInTalk />
       }
     ],
-    selectedIndex : null
+    selectedIndex: null
   };
 
-  handleListItemClick = (event, i) => {
-    console.log(event, i)
+  handleListItemClick = (event, i, name) => {
+    console.log(i);
     this.setState({
-      selectedIndex : i
-    })
-  }
+      selectedIndex: i,
+      [name]: !this.state[name]
+    });
+  };
 
   render() {
+    console.log(this.state);
     const { classes } = this.props;
     return (
       <div className={classes.root}>
         <List component="nav">
           {this.state.listNavigations.map((item, i) => (
-            <ListItem key={i}
-              button
-              selected={this.state.selectedIndex === i}
-              onClick={event => this.handleListItemClick(event, i)}
-            >
-              {item.icon}
-              <ListItemText primary={item.name} />
-            </ListItem>
+            <Fragment key={i}>
+              <ListItem
+                button
+                selected={this.state.selectedIndex === i}
+                onClick={event => this.handleListItemClick(event, i, item.name)}
+              >
+                {item.icon}
+                <ListItemText primary={item.name} />
+                {item.subItems && item.subItems.length > 0 ? (
+                  this.state[item.name] ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  )
+                ) : null}
+              </ListItem>
+              {item.subItems && item.subItems.length > 0 && (
+                <Collapse
+                  in={this.state[item.name]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Starred" />
+                    </ListItem>
+                  </List>
+                </Collapse>
+              )}
+            </Fragment>
           ))}
         </List>
       </div>

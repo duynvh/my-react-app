@@ -8,6 +8,7 @@ import setAuthToken from "./utils/setAuthToken";
 
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 
+
 class App extends Component {
   componentDidMount() {
     loadReCaptcha();
@@ -22,7 +23,8 @@ class App extends Component {
             <Route path="/register/:sponsor" component={Register} />
             <Route path="/register" component={Register} />
             <Route path="/login" exact component={Login} />
-            <Route path="/dashboard" exact component={Dashboard} />
+            <Route path="/dashboard"  component={Dashboard} />
+           
           </Switch>
         </BrowserRouter>
       </div>

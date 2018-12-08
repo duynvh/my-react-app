@@ -21,24 +21,24 @@ if (localStorage.jwtToken) {
 
   // Check for expired token
   const currentTime = Date.now() / 1000;
+  const socket = socketIOClient("http://52.193.53.226:5000");
+  socket.on("message", data => {
+    console.log("aaa");
+    if (data) {
+      console.log(data);
+      const newData = JSON.parse(data);
+      store.dispatch(listenSocket(newData));
+    }
+  });
 
   if (decoded.exp < currentTime) {
     // Logout User
     store.dispatch(logoutUser());
+
     // Redirect to login
     window.location.href = "/login";
   }
 }
-
-const socket = socketIOClient("http://52.193.53.226:5000");
-socket.on("message", data => {
-  console.log("aaa");
-  if (data) {
-    console.log(data);
-    const newData = JSON.parse(data);
-    store.dispatch(listenSocket(newData));
-  }
-});
 
 ReactDOM.render(
   <Provider store={store}>

@@ -33,7 +33,7 @@ function ListItemInformation(props) {
 
   return (
     <Fragment>
-      {listData.length > 0 && !loading
+      { !loading
         ? listData.map((item,i) => (
             <Grid key={i} item sm={3}>
               <Card className={classes.card} selected>

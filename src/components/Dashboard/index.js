@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,13 +13,14 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Grid from "@material-ui/core/Grid";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-
+import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import AvatarNavigation from "./AvatarNavigation";
 import ListNavigation from "./ListNavigation";
 import BoxInformation from "./BoxInformation";
 import MainContent from "./MainContent";
 import ListItemInformation from "./ListItemInformation";
 import { connect } from "react-redux";
+import Profile from "../Profile/index";
 
 const drawerWidth = 240;
 
@@ -86,10 +87,11 @@ class Dashboard extends React.Component {
     filter1: [],
     listData: [1, 2, 3, 4],
     socket: [],
-    loading: true
+    loading: false
   };
 
   componentDidMount() {
+    console.log(this.props);
     // const socket = socketIOClient('http://52.193.53.226:5000');
     // socket.emit('message','haha')
     // socket.on("FromAPI", data => console.log(data));
@@ -190,7 +192,40 @@ class Dashboard extends React.Component {
             [classes.contentShift]: open
           })}
         >
-          <div className={classes.drawerHeader} />
+          <Switch>
+            <Route
+              path="/dashboard"
+              exact
+              render={() => (
+                <Fragment>
+                  <div className={classes.drawerHeader} />
+                  <BoxInformation />
+                  <MainContent
+                    filter1={this.state.filter1}
+                    handleFilter1={this.handleFilter1}
+                    handleApply={this.handleApply}
+                  />
+                  <Grid container spacing={24}>
+                    <ListItemInformation
+                      loading={this.state.loading}
+                      listData={this.state.socket}
+                    />
+                  </Grid>
+                </Fragment>
+              )}
+            />
+            <Route
+              path="/dashboard/profile"
+              render={() => (
+                <Fragment>
+                  <div className={classes.drawerHeader} />
+                  <Profile />
+                </Fragment>
+              )}
+            />
+          </Switch>
+
+          {/* <div className={classes.drawerHeader} />
           <BoxInformation />
           <MainContent
             filter1={this.state.filter1}
@@ -202,7 +237,7 @@ class Dashboard extends React.Component {
               loading={this.state.loading}
               listData={this.state.socket}
             />
-          </Grid>
+          </Grid> */}
         </main>
       </div>
     );
